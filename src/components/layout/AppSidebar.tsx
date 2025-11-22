@@ -1,6 +1,6 @@
 import { Home, MessageSquare, Calendar, Users, BookOpen, Briefcase, FileText, Settings } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const mainItems = [
-  { title: "Feed", url: "/", icon: Home },
+  { title: "Feed", url: "/feed", icon: Home },
   { title: "AI Assistant", url: "/chat", icon: MessageSquare },
   { title: "Events", url: "/events", icon: Calendar },
 ];
@@ -29,6 +29,7 @@ const communityItems = [
 export function AppSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
+  const navigate = useNavigate();
   const collapsed = state === "collapsed";
 
   const isActive = (path: string) => {
@@ -40,7 +41,10 @@ export function AppSidebar() {
     <Sidebar className={collapsed ? "w-14" : "w-64"} collapsible="icon">
       <SidebarContent>
         <div className="px-4 py-6">
-          <h1 className={`font-bold text-xl text-sidebar-foreground transition-all ${collapsed ? "text-center" : ""}`}>
+          <h1
+            className={`font-bold text-xl text-sidebar-foreground transition-all cursor-pointer hover:opacity-80 ${collapsed ? "text-center" : ""}`}
+            onClick={() => navigate("/")}
+          >
             {collapsed ? "U" : "UniVerse"}
           </h1>
         </div>
@@ -54,7 +58,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <NavLink
                       to={item.url}
-                      end={item.url === "/"}
+                      end={item.url === "/feed"}
                       className="hover:bg-sidebar-accent/50 transition-colors"
                       activeClassName="bg-sidebar-accent font-medium"
                     >

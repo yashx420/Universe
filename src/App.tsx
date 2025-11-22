@@ -9,6 +9,7 @@ import Feed from "./pages/Feed";
 import Chat from "./pages/Chat";
 import Events from "./pages/Events";
 import Auth from "./pages/Auth";
+import Account from "./pages/Account";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/feed" element={<AppLayout><Feed /></AppLayout>} />
           <Route path="/chat" element={<AppLayout><Chat /></AppLayout>} />
           <Route path="/events" element={<AppLayout><Events /></AppLayout>} />
+          <Route path="/account" element={<AppLayout><Account /></AppLayout>} />
           <Route 
             path="/forums" 
             element={
