@@ -11,6 +11,16 @@ interface Message {
   content: string;
 }
 
+function LoadingDots() {
+  return (
+    <div className="flex gap-1 items-center">
+      <div className="w-2 h-2 bg-foreground rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+      <div className="w-2 h-2 bg-foreground rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+      <div className="w-2 h-2 bg-foreground rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+    </div>
+  );
+}
+
 export function ChatWindow() {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -19,14 +29,15 @@ export function ChatWindow() {
     },
   ]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSend = () => {
     if (!input.trim()) return;
 
     setMessages([...messages, { role: "user", content: input }]);
     setInput("");
+    setIsLoading(true);
 
-    // Simulate AI response
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
@@ -35,6 +46,7 @@ export function ChatWindow() {
           content: "I understand your question. Let me help you with that...",
         },
       ]);
+      setIsLoading(false);
     }, 1000);
   };
 
@@ -70,6 +82,18 @@ export function ChatWindow() {
               )}
             </div>
           ))}
+          {isLoading && (
+            <div className="flex gap-3">
+              <Avatar className="h-8 w-8 bg-primary">
+                <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                  AI
+                </AvatarFallback>
+              </Avatar>
+              <div className="bg-muted text-foreground rounded-lg p-3">
+                <LoadingDots />
+              </div>
+            </div>
+          )}
         </div>
       </ScrollArea>
 
@@ -79,9 +103,10 @@ export function ChatWindow() {
             placeholder="Ask me anything..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+            onKeyPress={(e) => e.key === "Enter" && !isLoading && handleSend()}
+            disabled={isLoading}
           />
-          <Button onClick={handleSend} size="icon">
+          <Button onClick={handleSend} size="icon" disabled={isLoading}>
             <Send className="h-4 w-4" />
           </Button>
         </div>
